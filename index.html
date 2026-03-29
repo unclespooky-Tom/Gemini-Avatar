@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Talking Avatar Overlay Demo</title>
+    <!-- Add Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="assets/delaunator.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- SVG Icons -->
+    <svg style="display: none;">
+        <symbol id="icon-menu" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+        </symbol>
+        <symbol id="icon-drag" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M10 9h4V6h3l-5-5-5 5h3v3zm-1 1H6V7l-5 5 5 5v-3h3v-4zm14 2l-5-5v3h-3v4h3v3l5-5zm-9 3h-4v3H7l5 5 5-5h-3v-3z"/>
+        </symbol>
+        <symbol id="icon-close" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/>
+        </symbol>
+    </svg>
+
+    <!-- AI WIDGET OVERLAY SYSTEM -->
+    <div id="ai-assistant-widget" class="widget-container">
+        
+        <!-- The Floating Avatar Box -->
+        <div id="avatar-frame" class="widget-avatar-wrapper shadow-glass square-shape">
+            <p id="upload-prompt" class="overlay-prompt">Open Settings</p>
+            <img id="source-image" class="hidden-layer">
+            
+            <div id="pan-container" class="pan-container">
+                <canvas id="avatar-canvas" class="hidden-layer"></canvas>
+            </div>
+            
+            <!-- Quick actions tethered to the avatar -->
+            <button id="menu-toggle" class="icon-btn inner-icon top-left hidden-btn" title="Settings Menu">
+                <svg class="icon"><use href="#icon-menu"></use></svg>
+            </button>
+            <button id="drag-handle-inner" class="icon-btn inner-icon top-right hidden-btn" title="Click and Drag to Move">
+                <svg class="icon"><use href="#icon-drag"></use></svg>
+            </button>
+        </div>
+
+        <div id="status-overlay" class="status-overlay">
+            <span id="toggle-idle">Status: Initializing AI...</span>
+        </div>
+
+        <!-- Settings Popout Component -->
+        <aside id="side-menu" class="settings-popout shadow-glass">
+            <div class="menu-header">
+                <h2>Settings</h2>
+                <button id="menu-close" class="icon-btn inner-icon"><svg class="icon"><use href="#icon-close"></use></svg></button>
+            </div>
+            <div class="menu-content overflow-scroll">
+                <div class="menu-section">
+                    <input type="file" id="image-upload" accept="image/*" class="hidden-input">
+                    <label for="image-upload" class="glass-button primary full-width">Upload Face Image</label>
+                </div>
+
+                <div class="menu-section">
+                    <label for="shape-select" class="menu-label">Widget Shape:</label>
+                    <select id="shape-select" class="glass-input">
+                        <option value="circle">Circle</option>
+                        <option value="square">Rounded Square</option>
+                    </select>
+                </div>
+                
+                <div class="menu-section">
+                    <label for="voice-select" class="menu-label">AI Voice Config:</label>
+                    <select id="voice-select" class="glass-input">
+                        <option value="default">Default OS Voice</option>
+                    </select>
+                </div>
+
+                <div class="menu-section">
+                    <label class="toggle-label">
+                        <input type="checkbox" id="voice-toggle" checked> Auto Talk Status
+                    </label>
+                </div>
+
+                <div class="menu-section">
+                    <button id="editor-toggle" class="glass-button full-width">Motion Editor (Align Face)</button>
+                    <p style="font-size: 0.75rem; color: #aaa; text-align: center; margin-top: 0.5rem;">Or drag the image to frame it perfectly!</p>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Main Logic -->
+    <script src="app.js"></script>
+</body>
+</html>

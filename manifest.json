@@ -1,0 +1,44 @@
+{
+  "manifest_version": 3,
+  "name": "Gemini Talking Avatar",
+  "version": "1.0",
+  "description": "An overlay widget that auto-lipsyncs Gemini responses using a local AI face mesh and TTS.",
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "talking-avatar@unclespooky.local"
+    }
+  },
+  "permissions": [
+    "storage"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "https://gemini.google.com/*"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "css": [
+        "content.css"
+      ]
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "index.html",
+        "app.js",
+        "style.css",
+        "assets/*",
+        "assets/wasm/*"
+      ],
+      "matches": [
+        "https://gemini.google.com/*"
+      ]
+    }
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'"
+  }
+}

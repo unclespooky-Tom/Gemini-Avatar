@@ -1,0 +1,132 @@
+:root {
+    --panel-bg: rgba(30, 41, 59, 0.85);
+    --panel-border: rgba(255, 255, 255, 0.1);
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --accent-color: #3b82f6;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+
+/* Ensure Iframe has zero background */
+html, body { 
+    background: transparent !important; 
+    background-color: transparent !important;
+    overflow: hidden; 
+    height: 100vh; width: 100vw; 
+    color-scheme: light dark;
+}
+
+.hidden-layer {
+    opacity: 0;
+    pointer-events: none;
+    position: absolute;
+    z-index: -1;
+}
+
+/* Base App Overlays & Shared Classes */
+.shadow-glass {
+    background: var(--panel-bg); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--panel-border); box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+}
+
+.icon-btn {
+    border-radius: 50%; display: flex; justify-content: center; align-items: center;
+    cursor: pointer; border: 1px solid rgba(255,255,255,0.1);
+    background: rgba(0,0,0,0.5); color: #fff; transition: background 0.2s, transform 0.2s, opacity 0.3s;
+}
+.icon-btn:hover { background: rgba(0,0,0,0.7); transform: scale(1.05); }
+.icon { width: 22px; height: 22px; pointer-events: none; }
+
+/* The Widget Container itself */
+.widget-container {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none; /* Allows clicks to pass through transparent areas of iframe */
+}
+
+/* Avatar Preview Window */
+.widget-avatar-wrapper {
+    position: absolute;
+    bottom: 0; right: 0;
+    width: 280px; height: 280px;
+    background: var(--panel-bg);
+    overflow: hidden; 
+    border: 2px solid rgba(255,255,255,0.15);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+    pointer-events: auto;
+    transition: border-radius 0.3s ease;
+}
+
+.widget-avatar-wrapper.circle-shape { border-radius: 50%; }
+.widget-avatar-wrapper.square-shape { border-radius: 20px; }
+
+/* For Image Cropping/Panning */
+.pan-container {
+    width: 100%; height: 100%;
+    display: flex; justify-content: center; align-items: center;
+    cursor: grab;
+}
+.pan-container:active { cursor: grabbing; }
+
+.widget-avatar-wrapper img, .widget-avatar-wrapper canvas {
+    /* Set to absolute and default object-fit so we can translate the canvas safely */
+    width: 100%; height: 100%; object-fit: cover; pointer-events: none;
+    transition: transform 0.1s;
+}
+
+.overlay-prompt { 
+    font-size: 0.95rem; text-align: center; color: #ccc; 
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); pointer-events: none;
+}
+
+/* Hover Menu Inner Icons */
+.inner-icon { width: 44px; height: 44px; padding: 10px; z-index: 50; }
+.top-left { position: absolute; top: 1.5rem; left: 1.5rem; }
+.top-right { position: absolute; top: 1.5rem; right: 1.5rem; }
+
+/* Hide buttons until avatar is hovered */
+.hidden-btn { opacity: 0.0; }
+.widget-avatar-wrapper:hover .hidden-btn { opacity: 1; }
+
+.status-overlay {
+    position: absolute; bottom: 1.5rem; left: 50%; transform: translateX(-50%); width: 100%; font-size: 0.8rem;
+    color: #fff; text-shadow: 1px 1px 3px #000; text-align: center; font-weight: 600; pointer-events: none; z-index: 10;
+}
+
+/* Extension Settings Popout */
+.settings-popout {
+    position: absolute; bottom: 300px; right: 0;
+    width: 300px; max-height: 380px; border-radius: 16px;
+    padding: 1.5rem; color: #fff;
+    transform: translateY(20px) scale(0.95); opacity: 0; pointer-events: none;
+    transition: transform 0.3s cubic-bezier(0.2, 0, 0, 1), opacity 0.3s;
+    display: flex; flex-direction: column;
+}
+.settings-popout.open { transform: translateY(0) scale(1); opacity: 1; pointer-events: auto; }
+
+.menu-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+.menu-header h2 { font-size: 1.25rem; font-weight: 600; }
+.overflow-scroll { overflow-y: auto; padding-right: 0.5rem; }
+.overflow-scroll::-webkit-scrollbar { width: 4px; }
+.overflow-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 4px; }
+
+.menu-section { margin-bottom: 1.25rem; display: flex; flex-direction: column; gap: 0.5rem; }
+.menu-label { font-size: 0.9rem; color: var(--text-secondary); }
+
+/* Generic UI Elements */
+.glass-input {
+    width: 100%; background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #fff; padding: 0.75rem 1rem; border-radius: 8px; outline: none; font-size: 0.95rem;
+}
+.glass-button {
+    background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);
+    color: #fff; padding: 0.75rem 1rem; border-radius: 8px; cursor: pointer; font-weight: 500;
+}
+.glass-button.primary { background: rgba(59, 130, 246, 0.25); border-color: rgba(59, 130, 246, 0.5); color: #bfdbfe; }
+.glass-button:hover { background: rgba(255,255,255,0.15); }
+.glass-button.primary:hover { background: rgba(59, 130, 246, 0.4); }
+.full-width { width: 100%; text-align: center; }
+.toggle-label { display: flex; align-items: center; gap: 0.5rem; font-size: 0.95rem; cursor: pointer; color: #ccc; }
+.hidden-input { display: none; }
